@@ -20,6 +20,14 @@ contract StakingApp is Ownable{
     uint256 public rewardPerPeriod;
     mapping(address => uint256) public userBalance;
     mapping(address => uint256) public elapsePeriod;
+    
+
+
+    struct Transaction{
+        uint256 amount;
+        uint256 timestamp;
+    }
+    mapping(address => Transaction[]) public transactionHistory;
 
     //Events
     event changeStakingPeriodEv(uint256 newStakingPeriod_);
@@ -46,6 +54,7 @@ contract StakingApp is Ownable{
         IERC20(stakingToken).transferFrom(msg.sender, address(this), amountToDeposit_);
         userBalance[msg.sender] += amountToDeposit_;
         elapsePeriod[msg.sender] = block.timestamp;
+        recordTransaction(amountToDeposit_, block.timestamp);
 
         emit DepositTokens(msg.sender, amountToDeposit_);
     }
@@ -57,6 +66,8 @@ contract StakingApp is Ownable{
         uint256 userBalance_ = userBalance[msg.sender];
         userBalance[msg.sender] = 0;
         IERC20(stakingToken).transfer(msg.sender, userBalance_);
+
+        recordTransaction(userBalance_, block.timestamp);
 
         emit WithdarawTokens(msg.sender, userBalance_);
     }
@@ -85,6 +96,16 @@ contract StakingApp is Ownable{
     receive() external payable onlyOwner{
         emit EtherSent(msg.value);
     }
+
+
+    //Internal function
+    function recordTransaction(uint256 amount_, uint256 timestamp) internal {
+        transactionHistory[msg.sender].push(Transaction(amount_, block.timestamp));
+    }
+
+    function getTransactionHistory(address user_) external view returns (Transaction[] memory) {
+    return transactionHistory[user_];
+}
 
     function changeStakingPeriod(uint256 newStakingPeriod_) external onlyOwner{
         stakingPeriod = newStakingPeriod_;
