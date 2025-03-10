@@ -1,6 +1,6 @@
 
 # 💸💻 Staking App
-This project is a decentralized staking application written in Solidity, utilizing the Foundry framework for development and testing. The application allows users to deposit tokens, stake them for a fixed period, claim rewards, and withdraw their staked tokens. The system uses ERC20 tokens for staking, and rewards are distributed at specified intervals.
+This project is a decentralized staking application written in Solidity, using the Foundry framework for development and testing. The application allows users to deposit tokens, stake them for a fixed period, claim rewards, and withdraw their staked tokens. The system uses ERC20 tokens for staking, and rewards are distributed at specified intervals.
 
 The repository also includes tests for both the StakingToken and StakingApp contracts to ensure they function as expected.
 
@@ -69,7 +69,7 @@ contract StakingApp is Ownable {
 
     event changeStakingPeriodEv(uint256 newStakingPeriod_);
     event DepositTokens(address userAddress_, uint256 depositAmount_);
-    event WithdarawTokens(address userAddress_, uint256 withdrawAmount_);
+    event WithdrawTokens(address userAddress_, uint256 withdrawAmount_);
     event EtherSent(uint256 amount_);
 
     constructor(address stakingToken_, address owner_, uint256 stakingPeriod_, uint256 fixedStakingAmount_, uint256 rewardPerPeriod_)  Ownable(owner_) {
@@ -97,7 +97,7 @@ contract StakingApp is Ownable {
         userBalance[msg.sender] = 0;
         IERC20(stakingToken).transfer(msg.sender, userBalance_);
 
-        emit WithdarawTokens(msg.sender, userBalance_);
+        emit WithdrawTokens(msg.sender, userBalance_);
     }
 
     // Claim rewards
