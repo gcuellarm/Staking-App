@@ -32,7 +32,7 @@ contract StakingApp is Ownable{
     //Events
     event changeStakingPeriodEv(uint256 newStakingPeriod_);
     event DepositTokens(address userAddress_, uint256 depositAmount_);
-    event WithdarawTokens(address userAddress_, uint256 withdrawAmount_);
+    event WithdrawTokens(address userAddress_, uint256 withdrawAmount_);
     event EtherSent(uint256 amount_);
 
     
@@ -69,7 +69,7 @@ contract StakingApp is Ownable{
 
         recordTransaction(userBalance_, block.timestamp);
 
-        emit WithdarawTokens(msg.sender, userBalance_);
+        emit WithdrawTokens(msg.sender, userBalance_);
     }
 
 
